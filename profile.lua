@@ -43,10 +43,12 @@ end
 local n = 3 -- nInputPlane
 local s = 299 -- input height and width
 local b = 3 -- batch size
-local m = 100 -- multiplier
+local m = 128 -- multiplier
 local k = 3 -- kernel size
 local p = 1 -- padding
 local st = 1 -- stride
+
+local testBatch = 1e3 -- number of repetition
 
 local X = torch.rand(b, n, s, s) -- 1x3x299x299 images
 local weight = torch.rand(m, n, k, k) -- weight
@@ -70,7 +72,7 @@ if test_utility then
 
     local timer = torch.Timer()  -- start a new timer object
 
-    for epoch = 1, 1e3 do
+    for epoch = 1, testBatch do
         Y_util = model_util:forward(X)
     end
     time_util = timer:time().real  -- get the final time
@@ -84,7 +86,7 @@ for epoch = 1, 10 do model:forward(X) end  -- warm up
 if cuda then cutorch.synchronize() end  -- wait for the GPU to finish
 local timer = torch.Timer()  -- start a new timer object
 
-for epoch = 1, 1e3 do
+for epoch = 1, testBatch do
     Y = model:forward(X)
 end
 
