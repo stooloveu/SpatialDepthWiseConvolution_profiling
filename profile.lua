@@ -43,7 +43,7 @@ end
 local n = 3 -- nInputPlane
 local s = 299 -- input height and width
 local b = 3 -- batch size
-local m = 128 -- multiplier
+local m = 64 -- multiplier
 local k = 3 -- kernel size
 local p = 1 -- padding
 local st = 1 -- stride
@@ -66,19 +66,20 @@ end
 
 if test_utility then
     model_util = spatialDepthWiseConv_util(n, m, k, st, p, s, weight, bias)
-	if cuda then model_util:cuda() end
+    if cuda then model_util:cuda() end
 
     for epoch = 1, 10 do model_util:forward(X) end  -- warm up
-    if cuda then cutorch.synchronize() end  -- wait for the GPU to finish
 
+    if cuda then cutorch.synchronize() end  -- wait for the GPU to finish
     local timer = torch.Timer()  -- start a new timer object
 
     for epoch = 1, testBatch do
         Y_util = model_util:forward(X)
     end
-    time_util = timer:time().real  -- get the final time
 
     if cuda then cutorch.synchronize() end  -- wait for the GPU to finish
+    time_util = timer:time().real  -- get the final time
+
     print('Util time:', time_util)
 end
 
@@ -101,7 +102,6 @@ if cuda then print('GPU time:', time)
 -- print(weight)
 -- print(Y)
 -- print(Y_util)
--- print(model_util:get(3):get(3).weight)
 
 if test_utility  then
     local abs_diff = Y_util:clone():csub(Y):abs()
