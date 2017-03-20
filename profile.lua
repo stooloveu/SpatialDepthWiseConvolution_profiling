@@ -69,6 +69,7 @@ if test_utility then
 	if cuda then model_util:cuda() end
 
     for epoch = 1, 10 do model_util:forward(X) end  -- warm up
+    if cuda then cutorch.synchronize() end  -- wait for the GPU to finish
 
     local timer = torch.Timer()  -- start a new timer object
 
@@ -77,6 +78,7 @@ if test_utility then
     end
     time_util = timer:time().real  -- get the final time
 
+    if cuda then cutorch.synchronize() end  -- wait for the GPU to finish
     print('Util time:', time_util)
 end
 
