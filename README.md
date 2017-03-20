@@ -17,7 +17,18 @@ luarocks make rocks/cunn-scm-1.rockspec
 If any errors occur when installing, try updating [Torch](https://github.com/torch/).
 
 ## Results
-Tested with the following settings:
+Configurations:
+
+CPU: Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz
+
+RAM: 8GB x 2 @ 2133 MHz
+
+GPU: GeForce GTX 1060 6 GB
+
+
+
+
+And tested with the following settings:
 
 | Constant variable      	| Value 	|
 |------------------------	|-------	|
